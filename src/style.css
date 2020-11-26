@@ -1,0 +1,46 @@
+.createAvatarDiv_content {
+  background-color: #e8fff8;
+  position: absolute;
+  z-index: 100;
+  top: 0;
+  right: 0;
+  width: 70%;
+  border: 1px solid grey;
+  border-radius: 4px;
+  @media screen and (max-width: 767px) {
+    width: 90%;
+  }
+}
+
+.previewDiv {
+  border: 1px solid grey;
+  width: 150px;
+  height: 150px;
+}
+
+.choose-file {
+  width: 250px;
+  @media screen and (max-width: 350px) {
+    width: 230px;
+  }
+}
+
+.profile-pic {
+  width: 100px;
+  height: 100px;
+  padding: 0;
+  border: none;
+}
+
+.opaque {
+  opacity: 1 !important;
+}
+
+.delete-button {
+  left: -35px;
+  top: 40px;
+  padding: 0 7px;
+  svg {
+    margin-bottom: 0.1rem;
+  }
+}
