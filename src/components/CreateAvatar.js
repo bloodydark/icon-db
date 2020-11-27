@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import Avatar from "react-avatar-edit";
+import firebase, { storage } from "../firebase/firebase"
 
 const CreateAvatar = ({ getData }) => {
   const [preview, setPreview] = useState("");
+  const [image, setImage] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
-  const onCrop = defaultPreview => {
+  const onCrop = (defaultPreview) => {
     setPreview(defaultPreview);
   };
 
@@ -12,9 +15,30 @@ const CreateAvatar = ({ getData }) => {
     setPreview("");
   };
 
-  const onBeforeFileLoad = () => {};
+  const onBeforeFileLoad = (e) => {
+    const image = e.target.files[0];
+    setImage(image);
+    console.log(image);
+    storage.ref(`images/${image.name}`).put(image).on(
+      "state_changed",
+      snapshot => {},
+      error => {
+        console.log(error);
+      },
+      () => {
+        storage.ref("images")
+        .child(image.name)
+        .getDownloadURL()
+        .then(url => {
+          console.log(url);
+        })
+      }
+    )
+  };
 
-  const onSelectPic = () => {
+
+
+  const onSelectPic = (e) => {
     getData(false, preview);
   };
 
@@ -31,6 +55,7 @@ const CreateAvatar = ({ getData }) => {
             // style={{ overflow: "scroll" }}
           >
             <Avatar
+              // handleImage={handleImage}
               imageWidth={270}
               width={"100%"}
               height={180}
@@ -68,6 +93,7 @@ const CreateAvatar = ({ getData }) => {
         <div className="col-6">
           <button
             type="button"
+            // onFileLoad={onFileLoad}
             className="btn btn-success btn-md float-right mr-2 mb-3 text-center"
             onClick={onSelectPic}
             disabled={!preview}
@@ -75,6 +101,8 @@ const CreateAvatar = ({ getData }) => {
           >
             Ok
           </button>
+          {/* onFileLoad={onFileLoad} */}
+          {/* <input type="file" onChange={handleImage} /> */}
         </div>
       </div>
     </div>

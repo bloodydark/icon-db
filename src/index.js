@@ -9,11 +9,19 @@ import Portal from "./components/Portal";
 const App = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState("");
+  const [image, setImage] = useState("");
+
+
+  const onFileLoad = (e) => {
+    if (e.target.files[0]) setImage(e.target.files[0]);
+  };
 
   const getData = (isOpened, imageSrc) => {
     setIsOpen(isOpened);
     setImageSrc(imageSrc);
   };
+
+  // console.log(imageSrc);
 
   return (
     <React.Fragment>

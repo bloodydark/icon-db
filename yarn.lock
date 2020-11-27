@@ -9739,6 +9739,11 @@ react-avatar-edit@^0.9.0:
     exif-js "^2.3.0"
     konva "^2.5.1"
 
+react-avatar-firebase@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/react-avatar-firebase/-/react-avatar-firebase-0.0.3.tgz#9ca759b427ee7575737beeed9fa1121249d396c1"
+  integrity sha512-N0gsCjPlm298X0DqCO95lLc50jZwHVOxgER//AR+7yWdsPTY//SV/Ckyt6iIWrECfHIhvceKSL0j7i8cAnlpMQ==
+
 react-dev-utils@^11.0.1:
   version "11.0.1"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-11.0.1.tgz#30106c2055acfd6b047d2dc478a85c356e66fe45"
