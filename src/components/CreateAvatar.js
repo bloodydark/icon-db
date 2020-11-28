@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import Avatar from "react-avatar-edit";
-import firebase, { storage } from "../firebase/firebase"
+import firebase, { storage } from "../firebase/firebase";
 
 const CreateAvatar = ({ getData }) => {
   const [preview, setPreview] = useState("");
   const [image, setImage] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [range, setRange] = useState("")
+  const editorRef = React.createRef()
+
 
   const onCrop = (defaultPreview) => {
     setPreview(defaultPreview);
@@ -19,28 +22,37 @@ const CreateAvatar = ({ getData }) => {
     const image = e.target.files[0];
     setImage(image);
     console.log(image);
-    storage.ref(`images/${image.name}`).put(image).on(
-      "state_changed",
-      snapshot => {},
-      error => {
-        console.log(error);
-      },
-      () => {
-        storage.ref("images")
-        .child(image.name)
-        .getDownloadURL()
-        .then(url => {
-          console.log(url);
-        })
-      }
-    )
   };
 
-
-
-  const onSelectPic = (e) => {
+  const onSelectPic = () => {
     getData(false, preview);
+    storage
+      .ref(`images/${image.name}`)
+      .put(image)
+      .on(
+        "state_changed",
+        (snapshot) => {},
+        (error) => {
+          console.log(error);
+        },
+        () => {
+          storage
+            .ref("images")
+            .child(image.name)
+            .getDownloadURL()
+            .then((url) => {
+              // console.log(url);
+              
+            });
+        }
+      );
   };
+
+  // const editImage = () => {
+  //   if(editorRef.current) {
+  //     const canvas = editorRef.current.getImage().toDataURL()
+  //   }
+  // }
 
   const onCancelSelect = () => {
     getData(false, "");
