@@ -1,14 +1,41 @@
-import React, { useState } from "react";
+import { parse } from "@fortawesome/fontawesome-svg-core";
+import React, { useState, useRef } from "react";
 import Avatar from "react-avatar-edit";
-import firebase, { storage } from "../firebase/firebase";
+import AvatarEditor from "react-avatar-editor";
+import firebase from "../firebase/firebase";
 
 const CreateAvatar = ({ getData }) => {
   const [preview, setPreview] = useState("");
   const [image, setImage] = useState("");
+  const [userImage, setUserImage] = useState("");
   const [imageUrl, setImageUrl] = useState("");
-  const [range, setRange] = useState("")
-  const editorRef = React.createRef()
+  const fs = require("fs");
+  const ref = useRef("");
+  const db = firebase.firestore().collection("test");
 
+  let icon;
+  const test = async (preview) => {
+    // 保存先のドキュメントの取得
+    const userRef = await db.doc();
+
+    // 保存する画像の読み込み
+    // icon = fs.readFileSync("mitsuhiko.png");
+
+    // blobに変換
+    const blob = preview;
+    const img = { img: blob };
+
+    // firestoreに保存
+    await userRef
+      .set(img, { merge: true })
+      .catch((error) => console.log(error));
+
+    // 下記は保存したデータの取得
+    const userSnapshot = await userRef.get();
+    const userImg = userSnapshot.data()["img"];
+    setImage(userImg);
+    console.log(userImg);
+  };
 
   const onCrop = (defaultPreview) => {
     setPreview(defaultPreview);
@@ -19,40 +46,30 @@ const CreateAvatar = ({ getData }) => {
   };
 
   const onBeforeFileLoad = (e) => {
-    const image = e.target.files[0];
-    setImage(image);
-    console.log(image);
+    const image = URL.createObjectURL(e.target.files[0]);
   };
 
   const onSelectPic = () => {
     getData(false, preview);
-    storage
-      .ref(`images/${image.name}`)
-      .put(image)
-      .on(
-        "state_changed",
-        (snapshot) => {},
-        (error) => {
-          console.log(error);
-        },
-        () => {
-          storage
-            .ref("images")
-            .child(image.name)
-            .getDownloadURL()
-            .then((url) => {
-              // console.log(url);
-              
-            });
-        }
-      );
+    test(preview);
+    //   storage
+    //     .ref(`images/${image.name}`)
+    //     .put(image)
+    //     .on(
+    //       "state_changed",
+    //       (snapshot) => {},
+    //       (error) => {
+    //         console.log(error);
+    //       },
+    //       () => {
+    //         storage
+    //           .ref("images")
+    //           .child(image.name)
+    //           .getDownloadURL()
+    //           .then((url) => {});
+    //       }
+    //     );
   };
-
-  // const editImage = () => {
-  //   if(editorRef.current) {
-  //     const canvas = editorRef.current.getImage().toDataURL()
-  //   }
-  // }
 
   const onCancelSelect = () => {
     getData(false, "");
@@ -67,13 +84,15 @@ const CreateAvatar = ({ getData }) => {
             // style={{ overflow: "scroll" }}
           >
             <Avatar
-              // handleImage={handleImage}
+              ref={ref}
+              img={image}
               imageWidth={270}
               width={"100%"}
               height={180}
               onCrop={onCrop}
               onClose={onClose}
               onBeforeFileLoad={onBeforeFileLoad}
+              // onPositionChange={onPositionChange}
             />
           </div>
         </div>
@@ -82,7 +101,7 @@ const CreateAvatar = ({ getData }) => {
             {preview && (
               <img
                 alt="preview"
-                src={preview}
+                src={image}
                 width="100%"
                 height="100%"
                 className="rounded-circle"
@@ -110,6 +129,7 @@ const CreateAvatar = ({ getData }) => {
             onClick={onSelectPic}
             disabled={!preview}
             style={{ minWidth: "100px" }}
+            // onChange={handleScale}
           >
             Ok
           </button>
