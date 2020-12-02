@@ -8,13 +8,14 @@ const CreateAvatar = ({ getData }) => {
   const [preview, setPreview] = useState("");
   const [image, setImage] = useState("");
   const [userImage, setUserImage] = useState("");
+  const [getBlob, setGetBlob] = useState("");
   const ref = useRef("");
   const db = firebase.firestore().collection("test");
 
-  // if (!preview) {
-  //   console.log("Empty");
-  // } else {
+  // if (preview) {
   //   console.log("Exist");
+  // } else {
+  //   console.log("Empty");
   // }
 
   const test = async (preview) => {
@@ -65,6 +66,19 @@ const CreateAvatar = ({ getData }) => {
   const onCancelSelect = () => {
     getData(false, "");
   };
+
+  // useEffect(() => {
+  //   db.limit(1).onSnapshot((snapshot) => {
+  //     snapshot.docs.map((doc) => {
+  //       const item = doc.data();
+  //       const blob = item.img;
+  //       if (!imageSrc) {
+  //         setState(blob);
+  //         console.log(blob);
+  //       }
+  //     });
+  //   });
+  // }, []);
 
   // console.log(preview);
   return (
