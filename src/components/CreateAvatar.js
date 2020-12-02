@@ -1,5 +1,5 @@
 import { parse } from "@fortawesome/fontawesome-svg-core";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Avatar from "react-avatar-edit";
 import AvatarEditor from "react-avatar-editor";
 import firebase from "../firebase/firebase";
@@ -13,30 +13,44 @@ const CreateAvatar = ({ getData }) => {
   const ref = useRef("");
   const db = firebase.firestore().collection("test");
 
-  let icon;
-  const test = async (preview) => {
-    // 保存先のドキュメントの取得
-    const userRef = await db.doc();
+  // const useFetch = url => {
+  const [result, setResult] = useState(null);
+  //副作用フック
+  useEffect(() => {
+    let unmounted = false;
 
-    // 保存する画像の読み込み
-    // icon = fs.readFileSync("mitsuhiko.png");
+    //非同期関数の即時呼び出し
+    const test = async (preview) => {
+      // 保存先のドキュメントの取得
+      const userRef = await db.doc();
 
-    // blobに変換
-    const blob = preview;
-    const img = { img: blob };
+      // blobに変換
+      const blob = preview;
+      const img = { img: blob };
 
-    // firestoreに保存
-    await userRef
-      .set(img, { merge: true })
-      .catch((error) => console.log(error));
+      // firestoreに保存
+      await userRef
+        .set(img, { merge: true })
+        .catch((error) => console.log(error));
 
-    // 下記は保存したデータの取得
-    //独立している
-    const userSnapshot = await userRef.get();
-    const userImg = userSnapshot.data()["img"];
-    setImage(userImg);
-    console.log(userImg);
-  };
+      // 下記は保存したデータの取得
+      //独立している
+      const userSnapshot = await userRef.get();
+      const userImg = userSnapshot.data()["img"];
+
+      //アンマウントされていなければステートを更新
+      if (!unmounted) {
+        setResult(userImg);
+      }
+    };
+    // return () => {unmounted = true}
+    return test();
+  }, []);
+
+  // useEffect(() => {
+
+  // return test;
+  // },[])
 
   const onCrop = (defaultPreview) => {
     setPreview(defaultPreview);
@@ -77,11 +91,10 @@ const CreateAvatar = ({ getData }) => {
   };
 
   return (
-    
     <div className="container">
-       <div>
-          <img src={userImage} />
-        </div>
+      <div>
+        <img src={userImage} />
+      </div>
       <div className="row mx-auto my-3">
         <div className="col-md-6 m-auto">
           <div
@@ -140,7 +153,6 @@ const CreateAvatar = ({ getData }) => {
           {/* onFileLoad={onFileLoad} */}
           {/* <input type="file" onChange={handleImage} /> */}
         </div>
-       
       </div>
     </div>
   );
