@@ -1,10 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import Avatar from "react-avatar-edit";
+import firebase from "../firebase/firebase";
 
 const ProfilePhoto = ({ getData, imageSrc }) => {
   const [toggle, setToggle] = useState(false);
+  const db = firebase.firestore().collection("test");
+
+  useEffect(() => {
+    db.limit(1).onSnapshot((snapshot) => {
+      snapshot.docs.map((doc) => {
+        const item = doc.data();
+        const blob = item.img;
+        if (!imageSrc) {
+          // <img src={""} />
+          // setImageSrc(blob);
+          imageSrc = blob;
+          console.log(imageSrc);
+        }
+      });
+    });
+  }, []);
+  // if (imageSrc) {
+  //   console.log("Exist");
+  // } else {
+  //   console.log("Empty");
+  //   // setToggle(true);
+  //   getData(true, imageSrc);
+  // }
 
   const handleToggleClick = () => {
     setToggle(true);

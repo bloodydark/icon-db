@@ -18,19 +18,19 @@ const App = () => {
     setImageSrc(imageSrc);
   };
 
-  useEffect(() => {
-    db.limit(1).onSnapshot((snapshot) => {
-      snapshot.docs.map((doc) => {
-        const item = doc.data();
-        const blob = item.img;
-        if (!imageSrc) {
-          // <img src={""} />
-          setImageSrc(blob);
-          console.log(blob);
-        }
-      });
-    });
-  }, []);
+  // useEffect(() => {
+  //   db.limit(1).onSnapshot((snapshot) => {
+  //     snapshot.docs.map((doc) => {
+  //       const item = doc.data();
+  //       const blob = item.img;
+  //       if (!imageSrc) {
+  //         // <img src={""} />
+  //         setImageSrc(blob);
+  //         console.log(blob);
+  //       }
+  //     });
+  //   });
+  // }, []);
 
   //   console.log("Empty");
   //   db.onSnapshot((snapshot) => {

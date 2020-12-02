@@ -11,6 +11,12 @@ const CreateAvatar = ({ getData }) => {
   const ref = useRef("");
   const db = firebase.firestore().collection("test");
 
+  // if (!preview) {
+  //   console.log("Empty");
+  // } else {
+  //   console.log("Exist");
+  // }
+
   const test = async (preview) => {
     // 保存先のドキュメントの取得
     const userRef = await db.doc();
