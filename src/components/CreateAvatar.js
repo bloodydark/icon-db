@@ -31,6 +31,7 @@ const CreateAvatar = ({ getData }) => {
       .catch((error) => console.log(error));
 
     // 下記は保存したデータの取得
+    //独立している
     const userSnapshot = await userRef.get();
     const userImg = userSnapshot.data()["img"];
     setImage(userImg);
@@ -76,7 +77,11 @@ const CreateAvatar = ({ getData }) => {
   };
 
   return (
+    
     <div className="container">
+       <div>
+          <img src={userImage} />
+        </div>
       <div className="row mx-auto my-3">
         <div className="col-md-6 m-auto">
           <div
@@ -92,7 +97,6 @@ const CreateAvatar = ({ getData }) => {
               onCrop={onCrop}
               onClose={onClose}
               onBeforeFileLoad={onBeforeFileLoad}
-              // onPositionChange={onPositionChange}
             />
           </div>
         </div>
@@ -136,6 +140,7 @@ const CreateAvatar = ({ getData }) => {
           {/* onFileLoad={onFileLoad} */}
           {/* <input type="file" onChange={handleImage} /> */}
         </div>
+       
       </div>
     </div>
   );
