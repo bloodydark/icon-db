@@ -8,18 +8,12 @@ const CreateAvatar = ({ getData }) => {
   const [preview, setPreview] = useState("");
   const [image, setImage] = useState("");
   const [userImage, setUserImage] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const fs = require("fs");
   const ref = useRef("");
   const db = firebase.firestore().collection("test");
 
-  let icon;
   const test = async (preview) => {
     // 保存先のドキュメントの取得
     const userRef = await db.doc();
-
-    // 保存する画像の読み込み
-    // icon = fs.readFileSync("mitsuhiko.png");
 
     // blobに変換
     const blob = preview;
@@ -33,9 +27,9 @@ const CreateAvatar = ({ getData }) => {
     // 下記は保存したデータの取得
     //独立している
     const userSnapshot = await userRef.get();
-    const userImg = userSnapshot.data()["img"];
-    setImage(userImg);
-    console.log(userImg);
+    const getBlobData = userSnapshot.data()["img"];
+    setPreview(getBlobData);
+    // console.log(getBlobData);
   };
 
   const onCrop = (defaultPreview) => {
@@ -51,37 +45,27 @@ const CreateAvatar = ({ getData }) => {
   };
 
   const onSelectPic = () => {
-    getData(false, preview);
     test(preview);
-    //   storage
-    //     .ref(`images/${image.name}`)
-    //     .put(image)
-    //     .on(
-    //       "state_changed",
-    //       (snapshot) => {},
-    //       (error) => {
-    //         console.log(error);
-    //       },
-    //       () => {
-    //         storage
-    //           .ref("images")
-    //           .child(image.name)
-    //           .getDownloadURL()
-    //           .then((url) => {});
-    //       }
-    //     );
+    // if (setUserImage) {
+    //   console.log("True");
+    //   setPreview();
+    //   console.log(userImage);
+    // } else {
+    //   console.log("False");
+    // }
+    getData(false, preview);
   };
 
   const onCancelSelect = () => {
     getData(false, "");
   };
 
+  // console.log(preview);
   return (
-    
     <div className="container">
-       <div>
-          <img src={userImage} />
-        </div>
+      {/* <div>
+        <img src={userImage} />
+      </div> */}
       <div className="row mx-auto my-3">
         <div className="col-md-6 m-auto">
           <div
@@ -105,7 +89,7 @@ const CreateAvatar = ({ getData }) => {
             {preview && (
               <img
                 alt="preview"
-                src={image}
+                src={preview}
                 width="100%"
                 height="100%"
                 className="rounded-circle"
@@ -140,7 +124,6 @@ const CreateAvatar = ({ getData }) => {
           {/* onFileLoad={onFileLoad} */}
           {/* <input type="file" onChange={handleImage} /> */}
         </div>
-       
       </div>
     </div>
   );
