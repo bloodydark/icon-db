@@ -9,28 +9,24 @@ const ProfilePhoto = ({ getData, imageSrc }) => {
   const [state, setState] = useState("");
   const db = firebase.firestore().collection("test");
 
-  // useEffect(() => {
-  //   db.limit(1).onSnapshot((snapshot) => {
-  //     snapshot.docs.map((doc) => {
-  //       const item = doc.data();
-  //       const blob = item.img;
-  //       if (!imageSrc && !toggle) {
-  //         // setToggle(true);
+  useEffect(() => {
+    db.limit(1).onSnapshot((snapshot) => {
+      snapshot.docs.map((doc) => {
+        const item = doc.data();
+        const blob = item.img;
+        if (!imageSrc && !toggle) {
+          imageSrc = blob;
+          setToggle(true);
+          getData(true, imageSrc);
+          // console.log(blob);
+        }
+      });
+    });
+  }, []);
 
-  //         // getData(true, imageSrc);
-  //         // <img src={""} />
-  //         // setImageSrc(blob);
-  //         // imageSrc = blob;
-  //         setState(blob);
-  //         console.log(blob);
-  //       }
-  //     });
-  //   });
-  // }, []);
-
-  // if (state) {
-  //   console.log("OK!");
-  // }
+  if (state) {
+    console.log("OK!");
+  }
   // if (imageSrc) {
   //   console.log("Exist");
   // } else {
