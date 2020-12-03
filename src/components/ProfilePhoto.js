@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import Avatar from "react-avatar-edit";
 import firebase from "../firebase/firebase";
 
 const ProfilePhoto = ({ getData, imageSrc }) => {
   const [toggle, setToggle] = useState(false);
-  const [state, setState] = useState("");
   const db = firebase.firestore().collection("test");
 
   useEffect(() => {
@@ -18,21 +16,13 @@ const ProfilePhoto = ({ getData, imageSrc }) => {
           imageSrc = blob;
           setToggle(true);
           getData(true, imageSrc);
-          // console.log(blob);
         }
       });
     });
   }, []);
 
-  if (state) {
-    console.log("OK!");
-  }
-  // if (imageSrc) {
-  //   console.log("Exist");
-  // } else {
-  //   console.log("Empty");
-  //   // setToggle(true);
-  //   getData(true, imageSrc);
+  // const deleteBlob = () => {
+  //   db.doc()
   // }
 
   const handleToggleClick = () => {

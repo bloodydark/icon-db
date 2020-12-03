@@ -1,42 +1,39 @@
 import { parse } from "@fortawesome/fontawesome-svg-core";
 import React, { useState, useRef } from "react";
 import Avatar from "react-avatar-edit";
-import AvatarEditor from "react-avatar-editor";
 import firebase from "../firebase/firebase";
+import shortid from "shortid";
 
 const CreateAvatar = ({ getData }) => {
   const [preview, setPreview] = useState("");
   const [image, setImage] = useState("");
-  const [userImage, setUserImage] = useState("");
-  const [getBlob, setGetBlob] = useState("");
   const ref = useRef("");
   const db = firebase.firestore().collection("test");
 
-  // if (preview) {
-  //   console.log("Exist");
-  // } else {
-  //   console.log("Empty");
-  // }
-
-  const test = async (preview) => {
+  const test = (preview) => {
     // 保存先のドキュメントの取得
-    const userRef = await db.doc();
+    // const userRef = await db.doc();
 
     // blobに変換
     const blob = preview;
-    const img = { img: blob };
+    // const img = { img: blob };
+    // const blobId = shortid.generate();
+    // const time = { hope: new Date() };
+    // const createdDate = new Date();
 
     // firestoreに保存
-    await userRef
-      .set(img, { merge: true })
+    // await userRef
+    db.add({
+      img: blob,
+      time: new Date(),
+      blobId: shortid.generate(),
+    })
+      // .set(time)
       .catch((error) => console.log(error));
 
-    // 下記は保存したデータの取得
-    //独立している
-    const userSnapshot = await userRef.get();
-    const getBlobData = userSnapshot.data()["img"];
-    setPreview(getBlobData);
-    // console.log(getBlobData);
+    // db.add({
+    //   time: new Date(),
+    // });
   };
 
   const onCrop = (defaultPreview) => {
@@ -53,6 +50,10 @@ const CreateAvatar = ({ getData }) => {
 
   const onSelectPic = () => {
     test(preview);
+    // db.add({
+    //   time: new Date()
+    // }
+    // )
     // if (setUserImage) {
     //   console.log("True");
     //   setPreview();
@@ -67,20 +68,6 @@ const CreateAvatar = ({ getData }) => {
     getData(false, "");
   };
 
-  // useEffect(() => {
-  //   db.limit(1).onSnapshot((snapshot) => {
-  //     snapshot.docs.map((doc) => {
-  //       const item = doc.data();
-  //       const blob = item.img;
-  //       if (!imageSrc) {
-  //         setState(blob);
-  //         console.log(blob);
-  //       }
-  //     });
-  //   });
-  // }, []);
-
-  // console.log(preview);
   return (
     <div className="container">
       {/* <div>
