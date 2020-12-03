@@ -3,8 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import firebase from "../firebase/firebase";
 
-const ProfilePhoto = ({ getData, imageSrc }) => {
+const ProfilePhoto = ({ getData, imageSrc, el }) => {
   const [toggle, setToggle] = useState(false);
+  const [blobKey, setBlobKey] = useState("");
   const db = firebase.firestore().collection("test");
 
   useEffect(() => {
@@ -12,6 +13,8 @@ const ProfilePhoto = ({ getData, imageSrc }) => {
       snapshot.docs.map((doc) => {
         const item = doc.data();
         const blob = item.img;
+        const getBlobId = item.blobId;
+        setBlobKey(getBlobId);
         if (!imageSrc && !toggle) {
           imageSrc = blob;
           setToggle(true);
@@ -22,8 +25,15 @@ const ProfilePhoto = ({ getData, imageSrc }) => {
   }, []);
 
   // const deleteBlob = () => {
-  //   db.doc()
-  // }
+  //   db.doc(el.blobId)
+  //     .delete()
+  //     .then(function () {
+  //       console.log("Document successfully deleted!");
+  //     })
+  //     .catch(function (error) {
+  //       console.error("Error removing document: ", error);
+  //     });
+  // };
 
   const handleToggleClick = () => {
     setToggle(true);
@@ -33,6 +43,7 @@ const ProfilePhoto = ({ getData, imageSrc }) => {
   const deletePic = () => {
     setToggle(false);
     getData(false, "");
+    // deleteBlob();
   };
 
   return (

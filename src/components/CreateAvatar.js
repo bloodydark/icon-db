@@ -3,6 +3,7 @@ import React, { useState, useRef } from "react";
 import Avatar from "react-avatar-edit";
 import firebase from "../firebase/firebase";
 import shortid from "shortid";
+import ProfilePhoto from "./ProfilePhoto";
 
 const CreateAvatar = ({ getData }) => {
   const [preview, setPreview] = useState("");
@@ -11,29 +12,14 @@ const CreateAvatar = ({ getData }) => {
   const db = firebase.firestore().collection("test");
 
   const test = (preview) => {
-    // 保存先のドキュメントの取得
-    // const userRef = await db.doc();
-
     // blobに変換
     const blob = preview;
-    // const img = { img: blob };
-    // const blobId = shortid.generate();
-    // const time = { hope: new Date() };
-    // const createdDate = new Date();
-
     // firestoreに保存
-    // await userRef
     db.add({
       img: blob,
       time: new Date(),
       blobId: shortid.generate(),
-    })
-      // .set(time)
-      .catch((error) => console.log(error));
-
-    // db.add({
-    //   time: new Date(),
-    // });
+    }).catch((error) => console.log(error));
   };
 
   const onCrop = (defaultPreview) => {
@@ -50,17 +36,6 @@ const CreateAvatar = ({ getData }) => {
 
   const onSelectPic = () => {
     test(preview);
-    // db.add({
-    //   time: new Date()
-    // }
-    // )
-    // if (setUserImage) {
-    //   console.log("True");
-    //   setPreview();
-    //   console.log(userImage);
-    // } else {
-    //   console.log("False");
-    // }
     getData(false, preview);
   };
 
@@ -70,15 +45,16 @@ const CreateAvatar = ({ getData }) => {
 
   return (
     <div className="container">
-      {/* <div>
-        <img src={userImage} />
-      </div> */}
       <div className="row mx-auto my-3">
         <div className="col-md-6 m-auto">
           <div
             className="mx-auto my-4 choose-file"
             // style={{ overflow: "scroll" }}
           >
+            {/* {preview &&
+              preview.map((el) => {
+                return <ProfilePhoto el={el} key={el.blobId} />;
+              })} */}
             <Avatar
               ref={ref}
               img={image}
@@ -128,8 +104,6 @@ const CreateAvatar = ({ getData }) => {
           >
             Ok
           </button>
-          {/* onFileLoad={onFileLoad} */}
-          {/* <input type="file" onChange={handleImage} /> */}
         </div>
       </div>
     </div>
